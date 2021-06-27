@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using kcp2k;
 using UnityEngine;
 
 public class Client : MonoBehaviour
@@ -32,7 +33,7 @@ public class Client : MonoBehaviour
 
    public void ConnectToServer()
    {
-      throw new NotImplementedException();
+      tcp.Connect();
    }
 
    public class TCP
@@ -57,10 +58,11 @@ public class Client : MonoBehaviour
          socket.EndConnect(result);
          if (!socket.Connected)
          {
+            Debug.Log("Client not connected");
             return;
          }
          _stream = socket.GetStream();
-
+         Debug.Log("Client connected");
          _stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
       }
 
@@ -68,7 +70,15 @@ public class Client : MonoBehaviour
       {
          try
          {
-
+            int byteLength = _stream.EndRead(result);
+            if (byteLength <= 0)
+            {
+               //Disconnect
+               return;
+            }
+            byte[] data = new byte[byteLength];
+            Array.Copy(receiveBuffer,data,byteLength);
+            _stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
          }
          catch (Exception e)
          {
