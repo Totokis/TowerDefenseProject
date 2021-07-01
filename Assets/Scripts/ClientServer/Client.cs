@@ -232,6 +232,7 @@ public class Client : MonoBehaviour
       _packetHandlers = new Dictionary<int, PacketHandler>
       {
          { (int)ServerPackets.Welcome, ClientHandle.Welcome },
+         {(int)ServerPackets.SpawnPlayer,ClientHandle.SpawnPlayer},
       };
 
       Debug.Log("Initialize packets");

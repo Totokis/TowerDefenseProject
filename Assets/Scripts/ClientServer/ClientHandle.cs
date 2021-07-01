@@ -15,5 +15,15 @@ public class ClientHandle : MonoBehaviour
       ClientSend.WelcomeReceived();
 
       Client.Instance.udp.Connect(((IPEndPoint)Client.Instance.tcp.socket.Client.LocalEndPoint).Port);
-   } 
+   }
+
+   public static void SpawnPlayer(Packet packet)
+   {
+       int id = packet.ReadInt();
+       string username = packet.ReadString();
+       Vector3 position = packet.ReadVector3();
+       Quaternion rotation = packet.ReadQuaternion();
+       GameManager.instance.SpawnPlayer(id,username,position,rotation);
+   }
+   
 }
