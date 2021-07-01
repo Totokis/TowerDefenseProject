@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using kcp2k;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class Client : MonoBehaviour
    public int port = 26950;
    public int myId = 0;
    public TCP tcp;
+   public UDP udp;
 
    delegate void PacketHandler(Packet packet);
 
@@ -33,6 +35,7 @@ public class Client : MonoBehaviour
    private void Start()
    {
       tcp = new TCP();
+      udp = new UDP();
    }
 
    public void ConnectToServer()
@@ -151,11 +154,86 @@ public class Client : MonoBehaviour
       }
    }
 
+   public class UDP
+   {
+      public UdpClient socket;
+      public IPEndPoint endPoint;
+
+      public UDP()
+      {
+         endPoint = new IPEndPoint(IPAddress.Parse(Instance.ip), Instance.port);
+      }
+      public void Connect(int localPort)
+      {
+         socket = new UdpClient(localPort);
+         socket.Connect(endPoint);
+         socket.BeginReceive(ReveiveCallback, null);
+
+         using (Packet packet = new Packet())
+         {
+            SendData(packet);
+         }
+      }
+
+      public void SendData(Packet packet)
+      {
+         try
+         {
+            packet.InsertInt(Instance.myId);
+            if (socket!= null)
+            {
+               socket.BeginSend(packet.ToArray(), packet.Length(), null, null);
+            }
+         }
+         catch (Exception e)
+         {
+            Debug.Log($"Error sending data to server via UDP: {e}");
+            throw;
+         }
+      }
+      private void ReveiveCallback(IAsyncResult result)
+      {
+         try
+         {
+            byte[] data = socket.EndReceive(result, ref endPoint);
+            socket.BeginReceive(ReveiveCallback, null);
+
+            if (data.Length < 4)
+            {
+               return;
+            }
+            HandleData(data);
+         }
+         catch (Exception e)
+         {
+            Console.WriteLine(e);
+            throw;
+         }
+      }
+      private void HandleData(byte[] data)
+      {
+         using (Packet packet = new Packet(data))
+         {
+            int packetLength = packet.ReadInt();
+            data = packet.ReadBytes(packetLength);
+            
+            ThreadManager.ExecuteOnMainThread(() => {
+               using (Packet packet = new Packet(data))
+               {
+                  int packetId = packet.ReadInt();
+                  _packetHandlers[packetId](packet);
+               }
+            });
+         }
+         
+      }
+   }
    void InitializeClientData()
    {
       _packetHandlers = new Dictionary<int, PacketHandler>
       {
-         { (int)ServerPackets.welcome, ClientHandle.Welcome }
+         { (int)ServerPackets.welcome, ClientHandle.Welcome },
+         { (int)ServerPackets.udpTest, ClientHandle.UdpTest },
       };
 
       Debug.Log("Initialize packets");
