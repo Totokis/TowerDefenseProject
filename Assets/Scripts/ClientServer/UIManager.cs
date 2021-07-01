@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
    
    [SerializeField] Button connect;
    [SerializeField] GameObject startMenu;
-   [SerializeField] InputField usernameField;
+   [SerializeField] public InputField usernameField;
    
    
    void Awake()
