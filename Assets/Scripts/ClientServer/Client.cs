@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using kcp2k;
 using UnityEngine;
 
 public class Client : MonoBehaviour
@@ -232,8 +231,7 @@ public class Client : MonoBehaviour
    {
       _packetHandlers = new Dictionary<int, PacketHandler>
       {
-         { (int)ServerPackets.welcome, ClientHandle.Welcome },
-         { (int)ServerPackets.udpTest, ClientHandle.UdpTest },
+         { (int)ServerPackets.Welcome, ClientHandle.Welcome },
       };
 
       Debug.Log("Initialize packets");

@@ -8,7 +8,7 @@ public class ClientSend : MonoBehaviour
    {
       packet.WriteLength();
       Client.Instance.tcp.SendData(packet);
-   }
+   }  
 
    static void SendUdpData(Packet packet)
    {
@@ -24,14 +24,5 @@ public class ClientSend : MonoBehaviour
          
          SendTCPData(packet);
       }
-   }
-   public static void UdpTestReceived()
-   {
-      using (Packet packet = new Packet((int)ClientPackets.udpTestReceived))
-      {
-         packet.Write("Received a UDP packet");
-         SendUdpData(packet);
-      }
-      
    }
 }

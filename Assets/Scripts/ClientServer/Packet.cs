@@ -5,18 +5,21 @@ using System.Text;
 using UnityEngine;
 
  /// <summary> Sent from server to client.</summary>
-    public enum ServerPackets
-    {
-        welcome = 1,
-        udpTest
-    }
+public enum ServerPackets
+{
+    Welcome = 1,
+    SpawnPlayer,
+    PlayerPosition,
+    PlayerRotation,
+}
 
 /// <summary> Sent from client to server.</summary>
-    public enum ClientPackets
-    {
-        welcomeReceived = 1,
-        udpTestReceived
-    }
+public enum ClientPackets
+{
+    welcomeReceived = 1,
+    playerMovement
+}
+
 
     public class Packet : IDisposable
     {
@@ -133,6 +136,23 @@ using UnityEngine;
         public void Write(int _value)
         {
             buffer.AddRange(BitConverter.GetBytes(_value));
+        }
+        /// <summary>Adds an Vector3 to the packet.</summary>
+        /// <param name="_value">The Vector3 to add.</param>
+        public void Write(Vector3 _value)
+        {
+           Write(_value.x);
+           Write(_value.y);
+           Write(_value.z);
+        }
+        /// <summary>Adds an Quaternion to the packet.</summary>
+        /// <param name="_value">The Quaternion to add.</param>
+        public void Write(Quaternion _value)
+        {
+           Write(_value.x);
+           Write(_value.y);
+           Write(_value.z);
+           Write(_value.w);
         }
         /// <summary>Adds a long to the packet.</summary>
         /// <param name="_value">The long to add.</param>

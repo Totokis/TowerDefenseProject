@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d0199c11aa6f514784c5c69cd8378d8, type: 3}
+  m_Script: {fileID: 0}
   m_Name: PlayFabEditorPrefsSO
-  m_EditorClassIdentifier: 
-  DevAccountEmail: pawelj_janusz@wp.pl
-  DevAccountToken: 7ife5ws6xc7g6fdsjmiws5p4ob8njxmcd4kj1fe11yms91krrgzenfi6bbdx4n9b48qfae137ph6px1dk3no46csmoznbpfh9bu1g39tqc6umkdi3qosnmd8iipw8guoioo8dujatpnxqoztc6b8fpspw63cu169niciwcnuftowbi7eutz566udkpzed7zhgj3pidrw
-  SelectedStudio: Rare Cerber Studio
-  SdkPath: Assets/PlayFabSDK
+  m_EditorClassIdentifier: PlayFabEditorExtensions:PlayFab.PfEditor:PlayFabEditorPrefsSO
+  DevAccountEmail: 
+  DevAccountToken: 
+  SelectedStudio: 
+  SdkPath: 
   EdExPath: 
   LocalCloudScriptPath: 
   PanelIsShown: 0
-  curMainMenuIdx: 1
+  curMainMenuIdx: 0
   curSubMenuIdx: 0
