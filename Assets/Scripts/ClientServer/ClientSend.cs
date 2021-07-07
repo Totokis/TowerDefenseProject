@@ -25,4 +25,17 @@ public class ClientSend : MonoBehaviour
          SendTCPData(packet);
       }
    }
+   public static void PlayerMovement(bool[] inputs)
+   {
+      using (Packet packet = new Packet((int)ClientPackets.playerMovement))
+      {
+         packet.Write(inputs.Length);
+         foreach (var input in inputs)
+         {
+            packet.Write(input);
+         }
+         packet.Write(GameManager.players[Client.Instance.myId].transform.rotation);
+         SendUdpData(packet);
+      } 
+   }
 }

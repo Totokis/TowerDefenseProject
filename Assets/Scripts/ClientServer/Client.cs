@@ -9,15 +9,32 @@ public class Client : MonoBehaviour
 {
    public static Client Instance;
    public static int dataBufferSize = 4096;
-   public string ip = "127.0.0.1";
+   public string ip = "192.168.0.15";
    public int port = 26950;
    public int myId = 0;
    public TCP tcp;
    public UDP udp;
 
+   private bool _isConnected = false;
    delegate void PacketHandler(Packet packet);
 
    private static Dictionary<int, PacketHandler> _packetHandlers;
+
+   private void OnApplicationQuit()
+   {
+      Disconnect();
+   }
+   private void Disconnect()
+   {
+      if (_isConnected)
+      {
+         _isConnected = false;
+         tcp.socket?.Close();
+         udp.socket?.Close();
+
+         Debug.Log("Player disconnected");
+      }
+   }
 
    private void Awake()
    {
@@ -40,6 +57,7 @@ public class Client : MonoBehaviour
    public void ConnectToServer()
    {
       InitializeClientData();
+      _isConnected = true;
       tcp.Connect();
    }
 
@@ -82,7 +100,7 @@ public class Client : MonoBehaviour
             int byteLength = _stream.EndRead(result);
             if (byteLength <= 0)
             {
-               //Disconnect
+               Disconnect();
                Debug.Log("Client disconnected");
                return;
             }
@@ -95,6 +113,7 @@ public class Client : MonoBehaviour
          catch (Exception e)
          {
             Console.WriteLine($"ReceiveCallback error: {e}");
+            Disconnect();
             throw;
          }
       }
@@ -151,6 +170,17 @@ public class Client : MonoBehaviour
             throw;
          }
       }
+
+      void Disconnect()
+      {
+         Instance.Disconnect();
+
+         _stream = null;
+         receivedData = null;
+         receiveBuffer = null;
+         socket = null;
+      }
+      
    }
 
    public class UDP
@@ -199,14 +229,14 @@ public class Client : MonoBehaviour
 
             if (data.Length < 4)
             {
+               Instance.Disconnect();
                return;
             }
             HandleData(data);
          }
          catch (Exception e)
          {
-            Console.WriteLine(e);
-            throw;
+            Disconnect();
          }
       }
       private void HandleData(byte[] data)
@@ -226,13 +256,25 @@ public class Client : MonoBehaviour
          }
          
       }
+
+      void Disconnect()
+      {
+         Instance.Disconnect();
+
+         endPoint = null;
+         socket = null;
+         
+      }
+      
    }
    void InitializeClientData()
    {
       _packetHandlers = new Dictionary<int, PacketHandler>
       {
          { (int)ServerPackets.Welcome, ClientHandle.Welcome },
-         {(int)ServerPackets.SpawnPlayer,ClientHandle.SpawnPlayer},
+         { (int)ServerPackets.SpawnPlayer,ClientHandle.SpawnPlayer},
+         { (int)ServerPackets.PlayerPosition,ClientHandle.PlayerPosition},
+         { (int)ServerPackets.PlayerRotation,ClientHandle.PlayerRotation},
       };
 
       Debug.Log("Initialize packets");
