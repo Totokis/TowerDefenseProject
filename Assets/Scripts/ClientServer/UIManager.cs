@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
    public static UIManager Instance;
    
    [SerializeField] Button connect;
+   [SerializeField] Configurator configurator;
    [SerializeField] GameObject startMenu;
    [SerializeField] public InputField usernameField;
    
@@ -25,10 +26,19 @@ public class UIManager : MonoBehaviour
       }
    }
 
-   public void ConnectToServer()
+   void ConnectToServer()
    {
       startMenu.SetActive(false);
       usernameField.interactable = false;
-      Client.Instance.ConnectToServer();
+      if (configurator.IsRemote)
+      {
+         configurator.StartRemoteLogin();
+      }
+      else
+      { 
+         Client.Instance.ConnectToServer();
+      }
+      
+      
    }
 }
