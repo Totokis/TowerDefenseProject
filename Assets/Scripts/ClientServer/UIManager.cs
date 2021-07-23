@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ public class UIManager : MonoBehaviour
 
    [SerializeField] private Button connect;
    [SerializeField] GameObject startMenu;
-   [SerializeField] public InputField usernameField;
+   [SerializeField] public TMP_InputField usernameField;
 
 
    void Awake()
