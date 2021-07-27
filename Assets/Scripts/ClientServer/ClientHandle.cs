@@ -43,4 +43,12 @@ public class ClientHandle : MonoBehaviour
        if(GameManager.players.ContainsKey(id))
             GameManager.players[id].transform.rotation = rotation;
    }
+
+   public static void PlayerDisconnected(Packet packet)
+   {
+       int id = packet.ReadInt();
+       
+       Destroy(GameManager.players[id].gameObject);
+       GameManager.players.Remove(id);
+   }
 }
