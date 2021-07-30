@@ -5,11 +5,21 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private void FixedUpdate()
+    [SerializeField] Transform cameraTransform;
+    
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            ClientSend.PlayerShoot(cameraTransform.forward);
+        }
+    }
+    
+    void FixedUpdate()
     {
         SendInputToServer();
     }
-    private void SendInputToServer()
+    void SendInputToServer()
     {
         bool[] inputs = new bool[]
         {
@@ -17,6 +27,7 @@ public class PlayerController : MonoBehaviour
             Input.GetKey(KeyCode.S),
             Input.GetKey(KeyCode.A),
             Input.GetKey(KeyCode.D),
+            Input.GetKey(KeyCode.Space),
         };
 
         //Debug.Log($"Up {inputs[0]} Down {inputs[1]} Left {inputs[2]} Right {inputs[3]}");
