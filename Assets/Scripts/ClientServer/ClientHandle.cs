@@ -51,4 +51,19 @@ public class ClientHandle : MonoBehaviour
        Destroy(GameManager.players[id].gameObject);
        GameManager.players.Remove(id);
    }
+   
+   public static void PlayerHealth(Packet packet)
+   {
+       int id = packet.ReadInt();
+       float health = packet.ReadFloat();
+       Debug.Log($"Players {id} health: {health}");
+       GameManager.players[id].Health = health;
+   }
+   
+   public static void PlayerRespawned(Packet packet)
+   {
+       int id = packet.ReadInt();
+       
+       GameManager.players[id].Respawn();
+   }
 }

@@ -17,7 +17,7 @@ public class ClientSend : MonoBehaviour
    }
    public static void WelcomeReceived()
    {
-      using (Packet packet = new Packet((int)ClientPackets.welcomeReceived))
+      using (Packet packet = new Packet((int)ClientPackets.WelcomeReceived))
       {
          packet.Write(Client.Instance.myId);
          packet.Write(UIManager.Instance.usernameField.text);
@@ -27,7 +27,7 @@ public class ClientSend : MonoBehaviour
    }
    public static void PlayerMovement(bool[] inputs)
    {
-      using (Packet packet = new Packet((int)ClientPackets.playerMovement))
+      using (Packet packet = new Packet((int)ClientPackets.PlayerMovement))
       {
          packet.Write(inputs.Length);
          foreach (var input in inputs)
@@ -41,7 +41,7 @@ public class ClientSend : MonoBehaviour
 
    public static void PlayerShoot(Vector3 facing)
    {
-      using (Packet packet = new Packet((int)ClientPackets.playerShoot))
+      using (Packet packet = new Packet((int)ClientPackets.PlayerShoot))
       {
          packet.Write(facing);
          

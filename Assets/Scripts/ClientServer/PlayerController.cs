@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            Debug.Log("PlayerShoot");
             ClientSend.PlayerShoot(cameraTransform.forward);
         }
     }
