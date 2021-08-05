@@ -11,15 +11,17 @@ public enum ServerPackets
     SpawnPlayer,
     PlayerPosition,
     PlayerRotation,
-    Message,
+    PlayerDisconnect,
+    PlayerHealth,
+    PlayerRespawned,
 }
 
 /// <summary> Sent from client to server.</summary>
 public enum ClientPackets
 {
-    welcomeReceived = 1,
-    playerMovement,
-    Message,
+    WelcomeReceived = 1,
+    PlayerMovement,
+    PlayerShoot,
 }
 
 

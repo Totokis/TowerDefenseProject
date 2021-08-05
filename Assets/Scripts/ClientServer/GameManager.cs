@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,9 +54,9 @@ public class GameManager : MonoBehaviour
             
         }
 
-        player.GetComponent<PlayerManager>().id = id;
-        player.GetComponent<PlayerManager>().username = username;
+        player.GetComponent<PlayerManager>().Initialize(id,username);
         players.Add(id,player.GetComponent<PlayerManager>());
+        Debug.Log($" {id} Player was spawned at: {DateTime.Now.ToShortTimeString()}, and his name is {username} !");
     }
     
 }
